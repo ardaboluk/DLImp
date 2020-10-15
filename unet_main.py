@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 
 input_dir = "images/"
 target_dir = "annotations/trimaps/"
-img_size = (300, 300)
+img_size = (224, 224)
 num_classes = 4
 batch_size = 32
 
@@ -70,6 +70,6 @@ train_gen = OxfordPets(
 )
 val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
 
-unet_model = vanilla_unet(num_classes)
+unet_model = vanilla_unet(input_shape=(img_size[0], img_size[1], 3), num_classes = num_classes)
 unet_model.summary()
 keras.utils.plot_model(unet_model)

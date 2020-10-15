@@ -139,6 +139,9 @@ def vanilla_unet(input_shape = (300, 300, 3), num_classes = 2):
         expansion_counter += 1
 
     # final layer
-    output = keras.layers.Conv2D(num_classes, kernel_size=(1, 1), strides = (1, 1), padding="same", name="final_layer")(x)
+    x = keras.layers.Conv2D(num_classes, kernel_size=(1, 1), strides = (1, 1), padding="same", name="final_layer")(x)
+
+    # channel-wise softmax layer for determining the class of each output pixel
+    output = keras.layers.Softmax(axis = -1)(x)
 
     return keras.Model(unet_input, output)

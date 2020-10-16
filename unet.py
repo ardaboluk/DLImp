@@ -125,6 +125,18 @@ def vanilla_unet(input_shape = (300, 300, 3), num_classes = 2):
     conv_counter = 1
     for cur_conv_block in expansion_conv2d_out_shapes:
         residual = contraction_feature_maps.pop()
+
+        # if residual.shape[1] > x.shape[1] or residual.shape[2] > x.shape[2]:
+        #     height_diff = residual.shape[1] - x.shape[1]
+        #     width_diff = residual.shape[2] - x.shape[2]
+        #     residual = keras.layers.Cropping2D(cropping=((tf.math.ceil(height_diff/2), tf.math.floor(height_diff/2)),
+        #                                                  (tf.math.ceil(width_diff/2), tf.math.floor(width_diff/2))))(residual)
+
+        height_diff = residual.shape[1] - x.shape[1]
+        width_diff = residual.shape[2] - x.shape[2]
+        residual = keras.layers.Cropping2D(cropping=((-(-height_diff // 2), (height_diff // 2)),
+                                                     (-(-width_diff // 2), (width_diff // 2))))(residual)
+
         x = keras.layers.Concatenate(name=f"expansion{expansion_counter}_concat")([residual, x])
         for cur_conv in cur_conv_block:
             x = keras.layers.Conv2D(cur_conv, 3, padding="same", activation="relu",
@@ -140,6 +152,9 @@ def vanilla_unet(input_shape = (300, 300, 3), num_classes = 2):
 
     # final layer
     output = keras.layers.Conv2D(num_classes, kernel_size=(3, 3), strides = (1, 1), activation="softmax", padding="same", name="final_layer")(x)
+
+    # resize the output to the desired shape
+    output = keras.layers.experimental.preprocessing.Resizing(input_shape[0], input_shape[1])(output)
 
     # channel-wise softmax layer for determining the class of each output pixel
     # output = keras.layers.Softmax(axis = -1)(final_layer)

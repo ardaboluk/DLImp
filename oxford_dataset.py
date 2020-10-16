@@ -7,6 +7,12 @@ from tensorflow.keras.preprocessing.image import load_img
 
 import os
 
+"""
+Explanation in the tf.utils.Sequence online doc:
+    Sequence are a safer way to do multiprocessing. This structure guarantees that the 
+    network will only train once on each sample per epoch which is not the case with generators.
+"""
+
 class OxfordPets(keras.utils.Sequence):
     """Helper to iterate over the data (as Numpy arrays)."""
 

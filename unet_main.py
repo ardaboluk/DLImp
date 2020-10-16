@@ -138,4 +138,3 @@ def save_input_gt_and_predicted_mask(pred_inputs, pred_gts, pred_results, num_pr
 # Display mask predicted by our model
 save_input_gt_and_predicted_mask(pred_inputs_list, pred_gt_list, results, test_samples)
 
-    

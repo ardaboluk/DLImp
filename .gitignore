@@ -1,3 +1,4 @@
+datasets/
 train_ckpt/
 __pycache__/
 .idea/

@@ -1,4 +1,4 @@
 
-# Vanilla UNET with Keras
+# DLImp
 
-Vanilla UNET implementation. Dataset preperation taken from keras.io/examples/vision/oxford_pets_image_segmentation/.
+Implementation of some deep learning algorithms in Tensorflow Keras.

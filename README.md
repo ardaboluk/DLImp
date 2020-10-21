@@ -1,4 +1,4 @@
 
-# DL implementations with Keras
+# Vanilla UNET with Keras
 
-Implementations of various networks.
+Vanilla UNET implementation. Dataset preperation taken from keras.io/examples/vision/oxford_pets_image_segmentation/.

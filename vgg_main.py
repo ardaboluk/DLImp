@@ -22,6 +22,8 @@ config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 batch_size = 10
 shuffle_buffer_size = 60000
 
+# Using the same seed is necessary if subset specified and shuffling is performed
+# Otherwise, training and validation data may overlap due to shuffling
 train_dataset = keras.preprocessing.image_dataset_from_directory(
     "./datasets/mnist/trainingData",
     validation_split=0.2,

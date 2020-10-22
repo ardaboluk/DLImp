@@ -10,11 +10,11 @@ import matplotlib as mpl
 mpl.use("TkAgg")
 import matplotlib.pyplot as plt
 
-from vgg import vgg16
+from vgg.vgg import vgg16
 
-physical_devices = tf.config.experimental.list_physical_devices('GPU')
-assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
-config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
+#physical_devices = tf.config.experimental.list_physical_devices('GPU')
+#assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
+#config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 # DEBUG
 # tf.enable_eager_execution()
@@ -25,7 +25,7 @@ shuffle_buffer_size = 60000
 # Using the same seed is necessary if subset specified and shuffling is performed
 # Otherwise, training and validation data may overlap due to shuffling
 train_dataset = keras.preprocessing.image_dataset_from_directory(
-    "./datasets/mnist/trainingData",
+    "../datasets/mnist/training",
     validation_split=0.2,
     subset="training",
     seed=1137,
@@ -35,7 +35,7 @@ train_dataset = keras.preprocessing.image_dataset_from_directory(
 )
 
 validation_dataset = keras.preprocessing.image_dataset_from_directory(
-    "./datasets/mnist/trainingData",
+    "../datasets/mnist/training",
     validation_split=0.2,
     subset="validation",
     seed=1337,
@@ -45,7 +45,7 @@ validation_dataset = keras.preprocessing.image_dataset_from_directory(
 )
 
 test_dataset = keras.preprocessing.image_dataset_from_directory(
-    "./datasets/mnist/testData",
+    "../datasets/mnist/testing",
     batch_size=batch_size,
     image_size=(224,224),
     color_mode="grayscale"
@@ -55,7 +55,7 @@ plt.figure(figsize=(10, 10))
 for images, labels in train_dataset.take(1):
     for i in range(9):
         ax = plt.subplot(3, 3, i + 1)
-        plt.imshow(images[i].numpy().astype("uint8"))
+        plt.imshow(np.squeeze(images[i].numpy().astype("uint8"), axis = -1), cmap="gray")
         plt.title(int(labels[i]))
         plt.axis("off")
 plt.show()

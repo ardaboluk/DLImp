@@ -1,28 +1,32 @@
 
 import tensorflow as tf
-from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
+
+from themodel import txt_cls_model
+
+import sys
+import os
 
 import string
 import re
 
 batch_size = 32
 raw_train_ds = tf.keras.preprocessing.text_dataset_from_directory(
-    "lstm_datasets/aclImdb/train",
+    "../datasets/lstm_datasets/aclImdb/train",
     batch_size=batch_size,
     validation_split=0.2,
     subset="training",
     seed=1337,
 )
 raw_val_ds = tf.keras.preprocessing.text_dataset_from_directory(
-    "lstm_datasets/aclImdb/train",
+    "../datasets/lstm_datasets/aclImdb/train",
     batch_size=batch_size,
     validation_split=0.2,
     subset="validation",
     seed=1337,
 )
 raw_test_ds = tf.keras.preprocessing.text_dataset_from_directory(
-    "lstm_datasets/aclImdb/test", batch_size=batch_size
+    "../datasets/lstm_datasets/aclImdb/test", batch_size=batch_size
 )
 
 print(
@@ -121,4 +125,20 @@ train_ds = train_ds.cache().prefetch(buffer_size=10)
 val_ds = val_ds.cache().prefetch(buffer_size=10)
 test_ds = test_ds.cache().prefetch(buffer_size=10)
 
+# create the model
+model = txt_cls_model(max_features = max_features, embedding_dim = embedding_dim)
 
+callbacks = [tf.keras.callbacks.ModelCheckpoint(filepath="./train_ckpt/cp-{epoch:04d}.ckpt", save_weights_only=True, verbose=1)]
+
+# Compile the model with binary crossentropy loss and an adam optimizer.
+model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+epochs = 50
+# Fit the model using the train and test datasets.
+model.fit(train_ds, validation_data=val_ds, epochs=epochs, callbacks=callbacks)
+
+print()
+print("Evaluating the model on the test set..")
+model.evaluate(test_ds)
+
+# Textvectorization layer can also be added to the model

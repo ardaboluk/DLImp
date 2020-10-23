@@ -15,6 +15,11 @@ import matplotlib.pyplot as plt
 
 from lstm import lstm_model
 
+"""
+Example is form keras.io/examples/timeseries/timeseries_weather_forecasting/
+This is a regression problem, where a Dense layer with a single output is added at the end of the LSTM.
+"""
+
 uri = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/jena_climate_2009_2016.csv.zip"
 zip_path = keras.utils.get_file(origin=uri, fname="jena_climate_2009_2016.csv.zip")
 zip_file = ZipFile(zip_path)
@@ -184,6 +189,8 @@ model = lstm_model(input_shape=(inputs.shape[1], inputs.shape[2]), num_classes=1
 
 model.compile(optimizer=keras.optimizers.Adam(learning_rate=learning_rate), loss="mse")
 model.summary()
+
+keras.utils.plot_model(model, show_shapes=True)
 
 path_checkpoint = "model_checkpoint.h5"
 es_callback = keras.callbacks.EarlyStopping(monitor="val_loss", min_delta=0, patience=5)

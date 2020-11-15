@@ -1,4 +1,4 @@
 
 # DLImp
 
-Implementation of some deep learning algorithms in Tensorflow Keras.
+Implementation of some deep learning algorithms.
